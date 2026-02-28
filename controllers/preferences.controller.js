@@ -1,19 +1,8 @@
 const User = require("../models/user.model");
 exports.getPreferences = async (req, res, next) => {
   try {
-    if (!req.user) {
-      return res.status(401).json({
-        success: false,
-        message: "Unauthorized access",
-      });
-    }
-
     return res.status(200).json({
-      success: true,
-      message: "User preferences fetched successfully",
-      data: {
-        preferences: req.user.preferences,
-      },
+      preferences: req.user.preferences,
     });
   } catch (error) {
     next(error);
@@ -25,26 +14,19 @@ exports.updatePreferences = async (req, res, next) => {
     const { preferences } = req.body;
 
     if (!Array.isArray(preferences)) {
-      return res.status(400).json({
-        message: "Preferences must be an array",
-      });
+      return res.status(400).json({ message: "Preferences must be an array" });
     }
 
     const updatedUser = await User.findByIdAndUpdate(
-      req.user._id, 
+      req.user._id,
       { preferences },
-      {
-        new: true,
-        runValidators: true, 
-      }
+      { new: true, runValidators: true }
+    );
 
-    ).select("-password");
-
-    res.status(200).json({
-      success: true,
-      message: "Preferences updated successfully",
+    return res.status(200).json({
       preferences: updatedUser.preferences,
     });
+
   } catch (error) {
     next(error);
   }

@@ -30,7 +30,6 @@ exports.getNews = async (req, res, next) => {
         language: "en",
       },
     });
-console.log(response);
 
     if (!response.data || response.data.status !== "ok") {
       return res.status(502).json({
@@ -40,11 +39,8 @@ console.log(response);
     }
 
     return res.status(200).json({
-      success: true,
-      message: "News fetched successfully",
-      totalResults: response.data.totalResults,
-      articles: response.data.articles,
-    });
+  news: response.data.articles,
+});
 
   } catch (error) {
     console.error("News API Error:", error.message);
